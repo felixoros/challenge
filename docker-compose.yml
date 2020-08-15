@@ -1,15 +1,15 @@
 version: '3'
 services: 
-    # database:
-    #     image: postgres
-    #     restart: always
-    #     environment: 
-    #         - POSTGRES_USER=admin
-    #         - POSTGRES_PASSWORD=felix
-    #         - POSTGRES_HOST_AUTH_METHOD=trust
-    #         - POSTGRES_DB=internal
-    #     ports: 
-    #         - 5432:5432
+    database:
+        image: postgres
+        restart: always
+        environment: 
+            - POSTGRES_USER=admin
+            - POSTGRES_PASSWORD=felix
+            - POSTGRES_HOST_AUTH_METHOD=trust
+            - POSTGRES_DB=internal
+        ports: 
+            - 5432:5432
 
     backend:
         image: "backend"
@@ -20,13 +20,13 @@ services:
         ports: 
             - 8080:8080
 
-    # webclient:
-    #     image: "webclient"
-    #     build: 
-    #         context: ./webclient
-    #         dockerfile: dockerfile-webclient
-    #     container_name: webclient
-    #     environment: 
-    #         - NODE_ENV=development
-    #     ports: 
-    #         - 80:80
+    webclient:
+        image: "webclient"
+        build: 
+            context: ./webclient
+            dockerfile: dockerfile-webclient
+        container_name: webclient
+        environment: 
+            - NODE_ENV=development
+        ports: 
+            - 80:80
