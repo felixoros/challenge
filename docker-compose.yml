@@ -1,10 +1,13 @@
 version: '3'
 services: 
-    database:
+    postgres:
         image: "postgres"
         build: 
             context: ./db
             dockerfile: dockerfile-postgres
+        labels: 
+            - "hf"
+        container_name: "postgres_service"
         restart: always
         env_file: 
             - .env
@@ -16,16 +19,25 @@ services:
         ports: 
             - ${POSTGRES_DEFAULT_PORT}:${POSTGRES_DEFAULT_PORT}
 
-    backend:
-        image: "backend"
+    express:
+        image: "express"
         build: 
             context: ./backend
             dockerfile: dockerfile-backend
-        container_name: backend
+        labels: 
+            - "hf"
+        container_name: "express_service"
         env_file: 
             - .env
         environment: 
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+            - POSTGRES_HOST_AUTH_METHOD
+            - POSTGRES_DB
+            - POSTGRES_DEFAULT_PORT
             - EXPRESS_DEFAULT_PORT
+        links: 
+            - postgres
         ports: 
             - ${EXPRESS_DEFAULT_PORT}:${EXPRESS_DEFAULT_PORT}
 
@@ -34,11 +46,15 @@ services:
         build: 
             context: ./webclient
             dockerfile: dockerfile-webclient
-        container_name: webclient
+        labels: 
+            - "hf"
+        container_name: "webclient_service"
         env_file: 
             - .env
         environment: 
             - NODE_ENV
             - REACT_DEFAULT_PORT
+        links: 
+            - express
         ports: 
             - ${REACT_DEFAULT_PORT}:${REACT_DEFAULT_PORT}
