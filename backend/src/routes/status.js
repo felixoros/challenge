@@ -19,7 +19,7 @@ let healthCheck = new health.HealthChecker();
 let liveCheck = new health.LivenessCheck("LivenessCheck", livePromise);
 healthCheck.registerLivenessCheck(liveCheck);
 
-let readyCheck = new health.PingCheck("postgres");
+let readyCheck = new health.PingCheck("127.0.0.1");
 healthCheck.registerReadinessCheck(readyCheck);
 
 router
