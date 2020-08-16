@@ -19,16 +19,16 @@ let healthCheck = new health.HealthChecker();
 let liveCheck = new health.LivenessCheck("LivenessCheck", livePromise);
 healthCheck.registerLivenessCheck(liveCheck);
 
-let readyCheck = new health.PingCheck("postgres:" + process.env.POSTGRES_DEFAULT_PORT);
+let readyCheck = new health.PingCheck("postgres");
 healthCheck.registerReadinessCheck(readyCheck);
 
 router
     .route('/live')
     .get(health.LivenessEndpoint(healthCheck));
 
-// router
-//     .route('/ready')
-//     .get(health.ReadinessEndpoint(healthCheck));
+router
+    .route('/ready')
+    .get(health.ReadinessEndpoint(healthCheck));
 
 router
     .route('/health')

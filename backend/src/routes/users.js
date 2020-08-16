@@ -1,17 +1,16 @@
 const express = require('express');
-const {pool} = require('../db/config')
+
+const userController = require('../controllers/user');
+// const checkJwt = require('../middlewares/checkJwt');
 
 let router = express.Router();
 
 router
-    .route('')
-    .get((req, resp) => {
-        pool.query('SELECT * FROM users', (error, results) => {
-            if (error) {
-                throw error
-            }
-            resp.status(200).json(results.rows);
-        });
-    });
+    .route('/create')
+    .post(userController.create);
+
+router
+    .route('/login')
+    .post(userController.login);
 
 module.exports = router;
