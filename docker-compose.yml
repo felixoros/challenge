@@ -1,15 +1,20 @@
 version: '3'
 services: 
     database:
-        image: postgres
+        image: "postgres"
+        build: 
+            context: ./db
+            dockerfile: dockerfile-postgres
         restart: always
+        env_file: 
+            - .env
         environment: 
-            - POSTGRES_USER=admin
-            - POSTGRES_PASSWORD=felix
-            - POSTGRES_HOST_AUTH_METHOD=trust
-            - POSTGRES_DB=internal
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+            - POSTGRES_HOST_AUTH_METHOD
+            - POSTGRES_DB
         ports: 
-            - 5432:5432
+            - ${POSTGRES_DEFAULT_PORT}:${POSTGRES_DEFAULT_PORT}
 
     backend:
         image: "backend"
@@ -17,8 +22,12 @@ services:
             context: ./backend
             dockerfile: dockerfile-backend
         container_name: backend
+        env_file: 
+            - .env
+        environment: 
+            - EXPRESS_DEFAULT_PORT
         ports: 
-            - 8080:8080
+            - ${EXPRESS_DEFAULT_PORT}:${EXPRESS_DEFAULT_PORT}
 
     webclient:
         image: "webclient"
@@ -26,7 +35,10 @@ services:
             context: ./webclient
             dockerfile: dockerfile-webclient
         container_name: webclient
+        env_file: 
+            - .env
         environment: 
-            - NODE_ENV=development
+            - NODE_ENV
+            - REACT_DEFAULT_PORT
         ports: 
-            - 80:80
+            - ${REACT_DEFAULT_PORT}:${REACT_DEFAULT_PORT}
